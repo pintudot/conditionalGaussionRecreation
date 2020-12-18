@@ -370,7 +370,7 @@ def train(args, lvae):
     open('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda, 'w').close()  # clear
     np.savetxt('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda, train_fea, delimiter=' ', fmt='%f')
     open('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' % args.lamda, 'w').close()
-    np.savetxt('lvae%d/train_tar.txt' % args.lamda, train_tar, delimiter=' ', fmt='%d')
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' % args.lamda, train_tar, delimiter=' ', fmt='%d')
     open('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda, 'w').close()
     np.savetxt('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda, train_rec, delimiter=' ', fmt='%f')
 
