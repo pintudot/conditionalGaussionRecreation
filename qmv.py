@@ -1,6 +1,6 @@
 #
 import os
-os.environ['R_HOME'] = '/home/loganriggs/anaconda3/lib/R' #path to your R installation
+#os.environ['R_HOME'] = '/home/loganriggs/anaconda3/lib/R' #path to your R installation
 
 from rpy2.robjects.packages import importr
 from rpy2.robjects import numpy2ri
@@ -24,33 +24,33 @@ parser.add_argument('--threshold', type=float, default=0.5, help='threshold of g
 args = parser.parse_args()
 
 def revise(epoch):
-    train_rec = np.loadtxt('lvae%d/train_rec.txt' %args.lamda)
+    train_rec = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' %args.lamda)
     rec_mean = np.mean(train_rec)
     rec_std = np.std(train_rec)
     rec_thres = rec_mean + 2 * rec_std #95%
 
-    omn_rec = np.loadtxt('lvae%d/omn_rec.txt' %args.lamda)
-    omn_pre = np.loadtxt('lvae%d/omn_pre.txt' %args.lamda)
+    omn_rec = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' %args.lamda)
+    omn_pre = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' %args.lamda)
     omn_pre[(omn_rec > rec_thres)] = args.num_class
-    open('lvae%d/omn_pre.txt' %args.lamda , 'w').close()  # clear
-    np.savetxt('lvae%d/omn_pre.txt' %args.lamda , omn_pre, delimiter=' ', fmt='%d')
+    open('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' %args.lamda , 'w').close()  # clear
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' %args.lamda , omn_pre, delimiter=' ', fmt='%d')
 
-    mnist_noise_rec = np.loadtxt('lvae%d/mnist_noise_rec.txt' %args.lamda )
-    mnist_noise_pre = np.loadtxt('lvae%d/mnist_noise_pre.txt' %args.lamda)
+    mnist_noise_rec = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_rec.txt' %args.lamda )
+    mnist_noise_pre = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' %args.lamda)
     mnist_noise_pre[(mnist_noise_rec > rec_thres)] = args.num_class
-    open('lvae%d/mnist_noise_pre.txt' %args.lamda , 'w').close()  # clear
-    np.savetxt('lvae%d/mnist_noise_pre.txt' %args.lamda , mnist_noise_pre, delimiter=' ', fmt='%d')
+    open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' %args.lamda , 'w').close()  # clear
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' %args.lamda , mnist_noise_pre, delimiter=' ', fmt='%d')
 
-    noise_rec = np.loadtxt('lvae%d/noise_rec.txt' %args.lamda)
-    noise_pre = np.loadtxt('lvae%d/noise_pre.txt' %args.lamda)
+    noise_rec = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/noise_rec.txt' %args.lamda)
+    noise_pre = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' %args.lamda)
     noise_pre[(noise_rec > rec_thres)] = args.num_class
-    open('lvae%d/noise_pre.txt' %args.lamda , 'w').close()  # clear
-    np.savetxt('lvae%d/noise_pre.txt' %args.lamda , noise_pre, delimiter=' ', fmt='%d')
+    open('/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' %args.lamda , 'w').close()  # clear
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' %args.lamda , noise_pre, delimiter=' ', fmt='%d')
 
 class GAU(object):
     def __init__(self, epoch):
-        self.trainfea = np.loadtxt('lvae%d/train_fea.txt' %args.lamda )
-        self.traintar = np.loadtxt('lvae%d/train_tar.txt' %args.lamda )
+        self.trainfea = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' %args.lamda )
+        self.traintar = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' %args.lamda )
         self.labelset = set(self.traintar)
         self.labelnum = len(self.labelset)
         self.num,self.dim = np.shape(self.trainfea)
@@ -142,7 +142,7 @@ class GAU(object):
 
         #result
         result = np.array(result)
-        np.savetxt('lvae%d/Result.txt' %args.lamda,result)
+        np.savetxt('/content/conditionalGaussionRecreation/lvae%d/Result.txt' %args.lamda,result)
 
         for i in range(labelnum+1):
             locals()['resultIndex' + str(i)] = np.argwhere(result == i)
@@ -178,7 +178,7 @@ class GAU(object):
         maperformance = np.append((performancesum)[3:],mafmeasure)/(labelnum+1)
 
         print(performance)
-        np.savetxt('lvae%d/performance.txt' %args.lamda , performance)
+        np.savetxt('/content/conditionalGaussionRecreation/lvae%d/performance.txt' %args.lamda , performance)
         return maperformance
 
 if __name__ == '__main__':
@@ -187,12 +187,12 @@ if __name__ == '__main__':
 
         revise(epoch)
         gau = GAU(epoch)
-        omn = ['lvae%d/omn_fea.txt' %args.lamda, 'lvae%d/omn_tar.txt' %args.lamda ,
-                   'lvae%d/omn_pre.txt' %args.lamda ]
-        mnist_noise = ['lvae%d/mnist_noise_fea.txt' %args.lamda, 'lvae%d/mnist_noise_tar.txt' %args.lamda ,
-                 'lvae%d/mnist_noise_pre.txt' %args.lamda ]
-        noise = ['lvae%d/noise_fea.txt' %args.lamda , 'lvae%d/noise_tar.txt' %args.lamda ,
-                     'lvae%d/noise_pre.txt' %args.lamda ]
+        omn = ['/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' %args.lamda, '/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' %args.lamda ,
+                   '/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' %args.lamda ]
+        mnist_noise = ['/content/conditionalGaussionRecreation/lvae%d/mnist_noise_fea.txt' %args.lamda, '/content/conditionalGaussionRecreation/lvae%d/mnist_noise_tar.txt' %args.lamda ,
+                 '/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' %args.lamda ]
+        noise = ['/content/conditionalGaussionRecreation/lvae%d/noise_fea.txt' %args.lamda , '/content/conditionalGaussionRecreation/lvae%d/noise_tar.txt' %args.lamda ,
+                     '/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' %args.lamda ]
 
         perf_omn = gau.test(omn, args.threshold)
         perf_mnist_noise = gau.test(mnist_noise, args.threshold)
@@ -200,4 +200,4 @@ if __name__ == '__main__':
         #
         ma = [perf_omn, perf_mnist_noise, perf_noise]
         print(ma)
-        np.savetxt('lvae%d/ma.txt' %args.lamda, ma)
+        np.savetxt('/content/conditionalGaussionRecreation/lvae%d/ma.txt' %args.lamda, ma)
