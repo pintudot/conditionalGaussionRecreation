@@ -47,7 +47,7 @@ class BaseDataLoader:
 class OmniglotLoader(BaseDataLoader):
     def __init__(self, batch_size=64, train=False, shuffle=True, drop_last=False):
         super(OmniglotLoader, self).__init__(batch_size, train, shuffle, drop_last)
-        omniglot_path = 'data/omn_dataset'
+        omniglot_path = '/content/conditionalGaussionRecreation/data/omn_dataset'
 
         if os.path.isdir(omniglot_path):
             print('Files already downloaded and verified')

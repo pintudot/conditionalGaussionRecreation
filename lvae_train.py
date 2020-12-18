@@ -59,7 +59,7 @@ lvae = LVAE(in_ch=1,
             kernel1=1, kernel2=2, kernel3=3, padding0=0, padding1=1, stride1=1, stride2=2,
             flat_dim32=32, flat_dim16=16, flat_dim8=8, flat_dim4=4, flat_dim2=2, flat_dim1=1,
             latent_dim512=512, latent_dim256=256, latent_dim128=128, latent_dim64=64, latent_dim32=32,
-            num_class=args.num_classes)
+            num_class=args.num_classes).cuda()
 
 use_cuda = torch.cuda.is_available() and True
 device = torch.device("cuda" if use_cuda else "cpu")
@@ -98,9 +98,9 @@ def train(args, lvae):
         lvae.train()
         print("Training... Epoch = %d" % epoch)
         correct_train = 0
-        open('lvae%d/train_fea.txt' % args.lamda, 'w').close()
-        open('lvae%d/train_tar.txt' % args.lamda, 'w').close()
-        open('lvae%d/train_rec.txt' % args.lamda, 'w').close()
+        open('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda, 'w').close()
+        open('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' % args.lamda, 'w').close()
+        open('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda, 'w').close()
         if epoch in decreasing_lr:
             optimizer.param_groups[0]['lr'] *= 0.1
             print("~~~learning rate:", optimizer.param_groups[0]['lr'])
@@ -128,13 +128,13 @@ def train(args, lvae):
             cor_fea = torch.Tensor.cpu(cor_fea).detach().numpy()
             cor_tar = torch.Tensor.cpu(cor_tar).detach().numpy()
             rec_loss = torch.Tensor.cpu(rec_loss).detach().numpy()
-            with open('lvae%d/train_fea.txt' % args.lamda, 'ab') as f:
+            with open('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda, 'ab') as f:
                 np.savetxt(f, cor_fea, fmt='%f', delimiter=' ', newline='\r')
                 f.write(b'\n')
-            with open('lvae%d/train_tar.txt' % args.lamda, 'ab') as t:
+            with open('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' % args.lamda, 'ab') as t:
                 np.savetxt(t, cor_tar, fmt='%d', delimiter=' ', newline='\r')
                 t.write(b'\n')
-            with open('lvae%d/train_rec.txt' % args.lamda, 'ab') as m:
+            with open('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda, 'ab') as m:
                 np.savetxt(m, rec_loss, fmt='%f', delimiter=' ', newline='\r')
                 m.write(b'\n')
 
@@ -188,26 +188,26 @@ def train(args, lvae):
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 best_val_epoch = epoch
-                train_fea = np.loadtxt('lvae%d/train_fea.txt' % args.lamda)
-                train_tar = np.loadtxt('lvae%d/train_tar.txt' % args.lamda)
-                train_rec = np.loadtxt('lvae%d/train_rec.txt' % args.lamda)
+                train_fea = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda)
+                train_tar = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' % args.lamda)
+                train_rec = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda)
                 print('!!!Best Val Epoch: {}, Best Val Loss:{:.4f}'.format(best_val_epoch, best_val_loss))
                 #torch.save(lvae, 'lvae%d.pt' % args.lamda)
 # test
-                open('lvae%d/omn_fea.txt' % args.lamda, 'w').close()
-                open('lvae%d/omn_tar.txt' % args.lamda, 'w').close()
-                open('lvae%d/omn_pre.txt' % args.lamda, 'w').close()
-                open('lvae%d/omn_rec.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' % args.lamda, 'w').close()
 
-                open('lvae%d/mnist_noise_fea.txt' % args.lamda, 'w').close()
-                open('lvae%d/mnist_noise_tar.txt' % args.lamda, 'w').close()
-                open('lvae%d/mnist_noise_pre.txt' % args.lamda, 'w').close()
-                open('lvae%d/mnist_noise_rec.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_fea.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_tar.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_rec.txt' % args.lamda, 'w').close()
 
-                open('lvae%d/noise_fea.txt' % args.lamda, 'w').close()
-                open('lvae%d/noise_tar.txt' % args.lamda, 'w').close()
-                open('lvae%d/noise_pre.txt' % args.lamda, 'w').close()
-                open('lvae%d/noise_rec.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/noise_fea.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/noise_tar.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' % args.lamda, 'w').close()
+                open('/content/conditionalGaussionRecreation/lvae%d/noise_rec.txt' % args.lamda, 'w').close()
 
                 for data_test, target_test in val_loader:
                     target_test_en = torch.Tensor(target_test.shape[0], args.num_classes)
@@ -229,42 +229,42 @@ def train(args, lvae):
                     pre_test = torch.Tensor.cpu(pre_test).detach().numpy()
                     rec_test = torch.Tensor.cpu(rec_test).detach().numpy()
 
-                    with open('lvae%d/omn_fea.txt' % args.lamda, 'ab') as f_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' % args.lamda, 'ab') as f_test:
                         np.savetxt(f_test, mu_test, fmt='%f', delimiter=' ', newline='\r')
                         f_test.write(b'\n')
-                    with open('lvae%d/omn_tar.txt' % args.lamda, 'ab') as t_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' % args.lamda, 'ab') as t_test:
                         np.savetxt(t_test, target_test, fmt='%d', delimiter=' ', newline='\r')
                         t_test.write(b'\n')
-                    with open('lvae%d/omn_pre.txt' % args.lamda, 'ab') as p_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' % args.lamda, 'ab') as p_test:
                         np.savetxt(p_test, pre_test, fmt='%d', delimiter=' ', newline='\r')
                         p_test.write(b'\n')
-                    with open('lvae%d/omn_rec.txt' % args.lamda, 'ab') as l_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' % args.lamda, 'ab') as l_test:
                         np.savetxt(l_test, rec_test, fmt='%f', delimiter=' ', newline='\r')
                         l_test.write(b'\n')
 
-                    with open('lvae%d/mnist_noise_fea.txt' % args.lamda, 'ab') as f_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_fea.txt' % args.lamda, 'ab') as f_test:
                         np.savetxt(f_test, mu_test, fmt='%f', delimiter=' ', newline='\r')
                         f_test.write(b'\n')
-                    with open('lvae%d/mnist_noise_tar.txt' % args.lamda, 'ab') as t_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_tar.txt' % args.lamda, 'ab') as t_test:
                         np.savetxt(t_test, target_test, fmt='%d', delimiter=' ', newline='\r')
                         t_test.write(b'\n')
-                    with open('lvae%d/mnist_noise_pre.txt' % args.lamda, 'ab') as p_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' % args.lamda, 'ab') as p_test:
                         np.savetxt(p_test, pre_test, fmt='%d', delimiter=' ', newline='\r')
                         p_test.write(b'\n')
-                    with open('lvae%d/mnist_noise_rec.txt' % args.lamda, 'ab') as l_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_rec.txt' % args.lamda, 'ab') as l_test:
                         np.savetxt(l_test, rec_test, fmt='%f', delimiter=' ', newline='\r')
                         l_test.write(b'\n')
 
-                    with open('lvae%d/noise_fea.txt' % args.lamda, 'ab') as f_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_fea.txt' % args.lamda, 'ab') as f_test:
                         np.savetxt(f_test, mu_test, fmt='%f', delimiter=' ', newline='\r')
                         f_test.write(b'\n')
-                    with open('lvae%d/noise_tar.txt' % args.lamda, 'ab') as t_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_tar.txt' % args.lamda, 'ab') as t_test:
                         np.savetxt(t_test, target_test, fmt='%d', delimiter=' ', newline='\r')
                         t_test.write(b'\n')
-                    with open('lvae%d/noise_pre.txt' % args.lamda, 'ab') as p_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' % args.lamda, 'ab') as p_test:
                         np.savetxt(p_test, pre_test, fmt='%d', delimiter=' ', newline='\r')
                         p_test.write(b'\n')
-                    with open('lvae%d/noise_rec.txt' % args.lamda, 'ab') as l_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_rec.txt' % args.lamda, 'ab') as l_test:
                         np.savetxt(l_test, rec_test, fmt='%f', delimiter=' ', newline='\r')
                         l_test.write(b'\n')
 # omn_test
@@ -290,16 +290,16 @@ def train(args, lvae):
                     pre_omn = torch.Tensor.cpu(pre_omn).detach().numpy()
                     rec_omn = torch.Tensor.cpu(rec_omn).detach().numpy()
 
-                    with open('lvae%d/omn_fea.txt' % args.lamda, 'ab') as f_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' % args.lamda, 'ab') as f_test:
                         np.savetxt(f_test, mu_omn, fmt='%f', delimiter=' ', newline='\r')
                         f_test.write(b'\n')
-                    with open('lvae%d/omn_tar.txt' % args.lamda, 'ab') as t_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' % args.lamda, 'ab') as t_test:
                         np.savetxt(t_test, tar_omn, fmt='%d', delimiter=' ', newline='\r')
                         t_test.write(b'\n')
-                    with open('lvae%d/omn_pre.txt' % args.lamda, 'ab') as p_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' % args.lamda, 'ab') as p_test:
                         np.savetxt(p_test, pre_omn, fmt='%d', delimiter=' ', newline='\r')
                         p_test.write(b'\n')
-                    with open('lvae%d/omn_rec.txt' % args.lamda, 'ab') as l_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' % args.lamda, 'ab') as l_test:
                         np.savetxt(l_test, rec_omn, fmt='%f', delimiter=' ', newline='\r')
                         l_test.write(b'\n')
 # mnist_noise_test
@@ -322,16 +322,16 @@ def train(args, lvae):
                     pre_mnist_noise = torch.Tensor.cpu(pre_mnist_noise).detach().numpy()
                     rec_mnist_noise = torch.Tensor.cpu(rec_mnist_noise).detach().numpy()
 
-                    with open('lvae%d/mnist_noise_fea.txt' % args.lamda, 'ab') as f_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_fea.txt' % args.lamda, 'ab') as f_test:
                         np.savetxt(f_test, mu_mnist_noise, fmt='%f', delimiter=' ', newline='\r')
                         f_test.write(b'\n')
-                    with open('lvae%d/mnist_noise_tar.txt' % args.lamda, 'ab') as t_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_tar.txt' % args.lamda, 'ab') as t_test:
                         np.savetxt(t_test, tar_mnist_noise, fmt='%d', delimiter=' ', newline='\r')
                         t_test.write(b'\n')
-                    with open('lvae%d/mnist_noise_pre.txt' % args.lamda, 'ab') as p_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_pre.txt' % args.lamda, 'ab') as p_test:
                         np.savetxt(p_test, pre_mnist_noise, fmt='%d', delimiter=' ', newline='\r')
                         p_test.write(b'\n')
-                    with open('lvae%d/mnist_noise_rec.txt' % args.lamda, 'ab') as l_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/mnist_noise_rec.txt' % args.lamda, 'ab') as l_test:
                         np.savetxt(l_test, rec_mnist_noise, fmt='%f', delimiter=' ', newline='\r')
                         l_test.write(b'\n')
 # noise_test
@@ -353,43 +353,43 @@ def train(args, lvae):
                     pre_noise = torch.Tensor.cpu(pre_noise).detach().numpy()
                     rec_noise = torch.Tensor.cpu(rec_noise).detach().numpy()
 
-                    with open('lvae%d/noise_fea.txt' % args.lamda, 'ab') as f_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_fea.txt' % args.lamda, 'ab') as f_test:
                         np.savetxt(f_test, mu_noise, fmt='%f', delimiter=' ', newline='\r')
                         f_test.write(b'\n')
-                    with open('lvae%d/noise_tar.txt' % args.lamda, 'ab') as t_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_tar.txt' % args.lamda, 'ab') as t_test:
                         np.savetxt(t_test, tar_noise, fmt='%d', delimiter=' ', newline='\r')
                         t_test.write(b'\n')
-                    with open('lvae%d/noise_pre.txt' % args.lamda, 'ab') as p_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_pre.txt' % args.lamda, 'ab') as p_test:
                         np.savetxt(p_test, pre_noise, fmt='%d', delimiter=' ', newline='\r')
                         p_test.write(b'\n')
-                    with open('lvae%d/noise_rec.txt' % args.lamda, 'ab') as l_test:
+                    with open('/content/conditionalGaussionRecreation/lvae%d/noise_rec.txt' % args.lamda, 'ab') as l_test:
                         np.savetxt(l_test, rec_noise, fmt='%f', delimiter=' ', newline='\r')
                         l_test.write(b'\n')
 
 
-    open('lvae%d/train_fea.txt' % args.lamda, 'w').close()  # clear
-    np.savetxt('lvae%d/train_fea.txt' % args.lamda, train_fea, delimiter=' ', fmt='%f')
-    open('lvae%d/train_tar.txt' % args.lamda, 'w').close()
+    open('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda, 'w').close()  # clear
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/train_fea.txt' % args.lamda, train_fea, delimiter=' ', fmt='%f')
+    open('/content/conditionalGaussionRecreation/lvae%d/train_tar.txt' % args.lamda, 'w').close()
     np.savetxt('lvae%d/train_tar.txt' % args.lamda, train_tar, delimiter=' ', fmt='%d')
-    open('lvae%d/train_rec.txt' % args.lamda, 'w').close()
-    np.savetxt('lvae%d/train_rec.txt' % args.lamda, train_rec, delimiter=' ', fmt='%f')
+    open('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda, 'w').close()
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/train_rec.txt' % args.lamda, train_rec, delimiter=' ', fmt='%f')
 
-    fea_omn = np.loadtxt('lvae%d/omn_fea.txt' % args.lamda)
-    tar_omn = np.loadtxt('lvae%d/omn_tar.txt' % args.lamda)
-    pre_omn = np.loadtxt('lvae%d/omn_pre.txt' % args.lamda)
-    rec_omn = np.loadtxt('lvae%d/omn_rec.txt' % args.lamda)
+    fea_omn = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' % args.lamda)
+    tar_omn = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' % args.lamda)
+    pre_omn = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' % args.lamda)
+    rec_omn = np.loadtxt('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' % args.lamda)
     fea_omn = fea_omn[:20000, :]
     tar_omn = tar_omn[:20000]
     pre_omn = pre_omn[:20000]
     rec_omn = rec_omn[:20000]
-    open('lvae%d/omn_fea.txt' % args.lamda, 'w').close()  # clear
-    np.savetxt('lvae%d/omn_fea.txt' % args.lamda, fea_omn, delimiter=' ', fmt='%f')
-    open('lvae%d/omn_tar.txt' % args.lamda, 'w').close()
-    np.savetxt('lvae%d/omn_tar.txt' % args.lamda, tar_omn, delimiter=' ', fmt='%d')
-    open('lvae%d/omn_pre.txt' % args.lamda, 'w').close()
-    np.savetxt('lvae%d/omn_pre.txt' % args.lamda, pre_omn, delimiter=' ', fmt='%d')
-    open('lvae%d/omn_rec.txt' % args.lamda, 'w').close()
-    np.savetxt('lvae%d/omn_rec.txt' % args.lamda, rec_omn, delimiter=' ', fmt='%d')
+    open('/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' % args.lamda, 'w').close()  # clear
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/omn_fea.txt' % args.lamda, fea_omn, delimiter=' ', fmt='%f')
+    open('/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' % args.lamda, 'w').close()
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/omn_tar.txt' % args.lamda, tar_omn, delimiter=' ', fmt='%d')
+    open('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' % args.lamda, 'w').close()
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/omn_pre.txt' % args.lamda, pre_omn, delimiter=' ', fmt='%d')
+    open('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' % args.lamda, 'w').close()
+    np.savetxt('/content/conditionalGaussionRecreation/lvae%d/omn_rec.txt' % args.lamda, rec_omn, delimiter=' ', fmt='%d')
 
     return best_val_loss, best_val_epoch
 
