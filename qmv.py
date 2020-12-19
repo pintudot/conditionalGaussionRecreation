@@ -129,8 +129,8 @@ class GAU(object):
             for j in range(labelnum):
                 p[j] = multivariateGaussian(testfea[i],mu[j],sigma[j])
 
-            delta = p-pNsigma
-            # print(delta)
+            delta = (p-pNsigma)
+            #print("delta",delta)
             if len(delta[delta > 0]) == 0:
                 #Unseen
                 prediction = labelnum
@@ -149,22 +149,29 @@ class GAU(object):
             locals()['targetIndex' + str(i)] = np.argwhere(testtar == i)
 
         for i in range(labelnum+1):
-            locals()['tp' + str(i)] = np.sum((testtar[(locals()['resultIndex' + str(i)])]) == i)
+            locals()['fn' + str(i)] = np.sum((testtar[(locals()['resultIndex' + str(i)])]) == i)
             locals()['fp' + str(i)] = np.sum((testtar[(locals()['resultIndex' + str(i)])]) != i)
-            locals()['fn' + str(i)] = np.sum((result[locals()['targetIndex' + str(i)]]) != i)
-            # print(locals()['tp' + str(i)],locals()['fp' + str(i)],locals()['fn' + str(i)])
+            locals()['tp' + str(i)] = np.sum((result[locals()['targetIndex' + str(i)]]) != i)
+            print("for",i,"tp etc",locals()['tp' + str(i)],locals()['fp' + str(i)],locals()['fn' + str(i)])
 
             performance[i, 0] = locals()['tp' + str(i)]
             performance[i, 1] = locals()['fp' + str(i)]
             performance[i, 2] = locals()['fn' + str(i)]
+        #locals()['tp' + str(labelnum)] = np.sum((testtar[(locals()['resultIndex' + str(labelnum)])]) == labelnum)
+        #locals()['fp' + str(labelnum)] = np.sum((testtar[(locals()['resultIndex' + str(labelnum)])]) != labelnum)
+        #locals()['fn' + str(labelnum)] = np.sum((result[locals()['targetIndex' + str(labelnum)]]) != labelnum)
+        #print("for",labelnum,"tp etc",locals()['tp' + str(labelnum)],locals()['fp' + str(labelnum)],locals()['fn' + str(labelnum)])
 
+        #performance[labelnum, 0] = locals()['tp' + str(labelnum)]
+        #performance[labelnum, 1] = locals()['fp' + str(labelnum)]
+        #performance[labelnum, 2] = locals()['fn' + str(labelnum)]
         for i in range(labelnum+1):
             locals()['precision' + str(i)] = locals()['tp' + str(i)]/(locals()['tp' + str(i)]+locals()['fp' + str(i)] + 1)
             locals()['recall' + str(i)] = locals()['tp' + str(i)]/(locals()['tp' + str(i)]+locals()['fn' + str(i)] + 1)
             try:
-                print("yooo")
-                print((locals()['precision' + str(i)] + locals()['recall' + str(i)]))
-                print("yooo")
+                
+                print("pres recall",(locals()['precision' + str(i)] + locals()['recall' + str(i)]))
+                
                 locals()['f-measure' + str(i)] = 2* locals()['precision' + str(i)]*locals()['recall' + str(i)]/(locals()['precision' + str(i)] + locals()['recall' + str(i)])
             except:
                 print("============================")
